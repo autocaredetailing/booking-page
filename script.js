@@ -1,10 +1,14 @@
 function doPost(e) {
 
-  const sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
+  // Parse incoming data
+  const data = JSON.parse(e.postData.contents);
 
-  // If data is sent as form data (most common)
-  const data = e.parameter;
+  // Get the sheet
+  const sheet = SpreadsheetApp
+    .getActiveSpreadsheet()
+    .getActiveSheet();
 
+  // Save booking
   sheet.appendRow([
     new Date(),
     data.name,
@@ -16,17 +20,19 @@ function doPost(e) {
   ]);
 
   // Send confirmation email
-  MailApp.sendEmail({
-    to: data.email,
-    subject: "Booking Confirmation Received – Autocare Detailing",
-    body:
-      "Hi " + data.name + ",\n\n" +
-      "Thanks for booking with us! We’ve received your request for " +
-      data.service + " on " + data.date + " at " + data.time + ".\n\n" +
-      "We’ll contact you shortly to confirm your appointment.\n\n" +
-      "Best regards,\nAutocare Detailing"
-  });
+  MailApp.sendEmail(
+    data.email,
+    "Appointment Confirmed – Autocare Detailing",
+    `Hi ${data.name},
 
+Your ${data.service} appointment is booked for ${data.date} at ${data.time}.
+
+We bring the sheen to you!
+
+Autocare Detailing Ltd`
+  );
+
+  // Respond to website
   return ContentService
     .createTextOutput(JSON.stringify({ success: true }))
     .setMimeType(ContentService.MimeType.JSON);
