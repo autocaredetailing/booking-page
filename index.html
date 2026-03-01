@@ -1,44 +1,45 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Book an Appointment</title>
-  <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Book an Appointment</title>
+<link rel="stylesheet" href="style.css">
 </head>
+
 <body>
 
 <div class="container">
-  <img src="logo.png" alt="Autocare Detailing Ltd" class="logo">
 
-  <h1>Book Your Appointment</h1>
-  <p>We bring the sheen to you ✨</p>
+<img src="logo.png" alt="Autocare Detailing Ltd" class="logo">
 
-  <form id="bookingForm">
+<h1>Book Your Appointment</h1>
+<p>We bring the sheen to you ✨</p>
 
-    <input type="text" name="name" placeholder="Full Name" required>
+<form id="bookingForm">
 
-    <input type="email" name="email" placeholder="Email Address" required>
+<input type="text" id="name" placeholder="Full Name" required>
+<input type="email" id="email" placeholder="Email Address" required>
+<input type="tel" id="phone" placeholder="Phone Number" required>
 
-    <input type="tel" name="phone" placeholder="Phone Number" required>
+<select id="service" required>
+<option value="">Select a Service</option>
+<option>Basic Exterior Services</option>
+<option>Basic Interior Services</option>
+<option>Additional Add-Ons</option>
+<option>Bundled Services</option>
+<option>Monthly Plans</option>
+</select>
 
-    <select name="service" required>
-      <option value="">Select a Service</option>
-      <option>Basic Exterior Services</option>
-      <option>Basic Interior Services</option>
-      <option>Additional Add-Ons</option>
-      <option>Bundled Services</option>
-      <option>Monthly Plans</option>
-    </select>
+<input type="date" id="date" required>
+<input type="time" id="time" required>
 
-    <input type="date" id="date" name="date" required>
-    <input type="time" name="time" required>
+<button type="submit">Confirm Booking</button>
 
-    <button type="submit">Confirm Booking</button>
+</form>
 
-  </form>
+<p class="note">You’ll receive a confirmation after booking.</p>
 
-  <p class="note">You’ll receive a confirmation email after booking.</p>
 </div>
 
 <script src="script.js"></script>
