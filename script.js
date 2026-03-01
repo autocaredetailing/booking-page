@@ -1,30 +1,38 @@
-const scriptURL = "https://script.google.com/macros/library/d/1DmJSVPbCiASsogM7oabqlY_jmUVdhKhTBZly8w3PlqBL59HKl952k6ab/3"; // paste your /exec URL
+const form = document.getElementById("bookingForm");
 
-document.getElementById("bookingForm").addEventListener("submit", async function(e) {
+form.addEventListener("submit", async (e) => {
   e.preventDefault();
 
-  const formData = new FormData();
-  formData.append("name", document.getElementById("name").value);
-  formData.append("email", document.getElementById("email").value);
-  formData.append("phone", document.getElementById("phone").value);
-  formData.append("service", document.getElementById("service").value);
-  formData.append("date", document.getElementById("date").value);
-  formData.append("time", document.getElementById("time").value);
+  const data = {
+    name: form.name.value,
+    email: form.email.value,
+    phone: form.phone.value,
+    service: form.service.value,
+    date: form.date.value,
+    time: form.time.value
+  };
 
   try {
-    await fetch(scriptURL, {
+    const response = await fetch("PASTE_YOUR_WEB_APP_URL_HERE", {
       method: "POST",
-      body: formData
+      body: JSON.stringify(data),
+      headers: {
+        "Content-Type": "application/json"
+      }
     });
 
-    alert("✅ Booking submitted successfully!");
-    document.getElementById("bookingForm").reset();
-
+    if (response.ok) {
+      alert("✅ Booking successful! We will contact you soon.");
+      form.reset();
+    } else {
+      alert("❌ Error submitting booking.");
+    }
   } catch (error) {
-    alert("❌ Error submitting booking.");
+    alert("⚠️ Network error. Please try again.");
     console.error(error);
   }
 });
 
 // Prevent past dates
-document.getElementById("date").min = new Date().toISOString().split("T")[0];
+document.getElementById("date").min =
+  new Date().toISOString().split("T")[0];
