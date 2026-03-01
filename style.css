@@ -17,24 +17,21 @@ body {
   box-shadow: 0 0 40px rgba(0,170,255,0.25);
 }
 
-h1 {
-  margin-bottom: 0.5rem;
+.logo {
+  width: 100%;
+  max-width: 220px;
+  display: block;
+  margin: 0 auto 1rem;
 }
+
+h1 { margin-bottom: 0.5rem; }
 
 p {
   margin-bottom: 1.5rem;
-  color: #555;
+  color: #aaa;
 }
 
-input {
-  width: 100%;
-  padding: 12px;
-  margin-bottom: 1rem;
-  border-radius: 8px;
-  border: 1px solid #ddd;
-}
-
-select {
+input, select {
   width: 100%;
   padding: 12px;
   margin-bottom: 1rem;
@@ -55,20 +52,10 @@ button {
   cursor: pointer;
 }
 
-button:hover {
-  opacity: 0.9;
-}
+button:hover { opacity: 0.9; }
 
 .note {
   margin-top: 1rem;
   font-size: 0.85rem;
   text-align: center;
-}
-
-logo {
-  width: 100%;
-  max-width: 220px;
-  height: auto;
-  display: block;
-  margin: 0 auto 1rem auto;
 }
