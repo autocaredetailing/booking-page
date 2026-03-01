@@ -13,19 +13,21 @@ form.addEventListener("submit", async (e) => {
   };
 
   try {
-    const response = await fetch("https://script.google.com/macros/s/AKfycbxJ_ekAJngwQY8pS6i8dzyQ310_SFSqAq3VMVg65wCn6gOJB7OyatDFUEJdx9EWP_RAQw/exec", {
+    const response = await fetch("PASTE_YOUR_EXEC_URL_HERE", {
       method: "POST",
-      body: JSON.stringify(data),
       headers: {
         "Content-Type": "application/json"
-      }
+      },
+      body: JSON.stringify(data)
     });
 
-    if (response.ok) {
-      alert("✅ Booking successful! We will contact you soon.");
+    const result = await response.json();
+
+    if (result.status === "success") {
+      alert("✅ Booking confirmed!");
       form.reset();
     } else {
-      alert("❌ Error submitting booking.");
+      alert("❌ Submission failed.");
     }
   } catch (error) {
     alert("⚠️ Network error. Please try again.");
@@ -33,6 +35,5 @@ form.addEventListener("submit", async (e) => {
   }
 });
 
-// Prevent past dates
 document.getElementById("date").min =
   new Date().toISOString().split("T")[0];
