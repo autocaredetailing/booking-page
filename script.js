@@ -1,39 +1,37 @@
-function doPost(e) {
+const scriptURL = "YOUR_WEB_APP_URL";
 
-  // Parse incoming data
-  const data = JSON.parse(e.postData.contents);
+document.getElementById("bookingForm").addEventListener("submit", async function(e) {
+  e.preventDefault();
 
-  // Get the sheet
-  const sheet = SpreadsheetApp
-    .getActiveSpreadsheet()
-    .getActiveSheet();
+  const data = {
+    name: document.getElementById("name").value,
+    email: document.getElementById("email").value,
+    phone: document.getElementById("phone").value,
+    service: document.getElementById("service").value,
+    date: document.getElementById("date").value,
+    time: document.getElementById("time").value
+  };
 
-  // Save booking
-  sheet.appendRow([
-    new Date(),
-    data.name,
-    data.email,
-    data.phone,
-    data.service,
-    data.date,
-    data.time
-  ]);
+  try {
+    const response = await fetch(scriptURL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data)
+    });
 
-  // Send confirmation email
-  MailApp.sendEmail(
-    data.email,
-    "Appointment Confirmed – Autocare Detailing",
-    `Hi ${data.name},
+    const result = await response.json();
 
-Your ${data.service} appointment is booked for ${data.date} at ${data.time}.
+    if (result.status === "success") {
+      alert("✅ Booking submitted successfully!");
+      document.getElementById("bookingForm").reset();
+    } else {
+      alert("❌ Error submitting booking.");
+    }
 
-We bring the sheen to you!
+  } catch (error) {
+    alert("⚠️ Network error. Please try again.");
+  }
+});
 
-Autocare Detailing Ltd`
-  );
-
-  // Respond to website
-  return ContentService
-    .createTextOutput(JSON.stringify({ success: true }))
-    .setMimeType(ContentService.MimeType.JSON);
-}
+// Prevent past dates
+document.getElementById("date").min = new Date().toISOString().split("T")[0];
