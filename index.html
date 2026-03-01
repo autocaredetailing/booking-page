@@ -7,39 +7,40 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <div class="container">
-    <h1>Book Your Appointment</h1>
-    <p>Let’s get you shining ✨</p>
 
-    <form id="bookingForm">
-      <img src="logo.png" alt="Autocare Detailing Ltd" class="logo">
-      <h1>Book Your Appointment</h1>
-      <p>We bring the sheen to you ✨</p>
-      <input type="text" placeholder="Full Name" required>
-        
-      <input type="email" placeholder="Email Address" required>
+<div class="container">
+  <img src="logo.png" alt="Autocare Detailing Ltd" class="logo">
 
-      <input type="tel" name="phone" placeholder="Phone Number" required>
+  <h1>Book Your Appointment</h1>
+  <p>We bring the sheen to you ✨</p>
 
-      <select required>
-         <option value="">Select a Service</option>
-         <option>Basic Exterior Services</option>
-         <option>Basic Interior Services</option>
-         <option>Additional Add-Ons</option>
-         <option>Bundled Services</option>
-         <option>Monthly Plans</option>
-     </select>
+  <form id="bookingForm">
 
-<input type="date" id="date" required>
+    <input type="text" name="name" placeholder="Full Name" required>
 
-<input type="time" required>
+    <input type="email" name="email" placeholder="Email Address" required>
 
-<button type="submit">Confirm Booking</button>
-    </form>
+    <input type="tel" name="phone" placeholder="Phone Number" required>
 
-    <p class="note">You’ll receive a confirmation email after booking.</p>
-  </div>
+    <select name="service" required>
+      <option value="">Select a Service</option>
+      <option>Basic Exterior Services</option>
+      <option>Basic Interior Services</option>
+      <option>Additional Add-Ons</option>
+      <option>Bundled Services</option>
+      <option>Monthly Plans</option>
+    </select>
 
-  <script src="script.js"></script>
+    <input type="date" id="date" name="date" required>
+    <input type="time" name="time" required>
+
+    <button type="submit">Confirm Booking</button>
+
+  </form>
+
+  <p class="note">You’ll receive a confirmation email after booking.</p>
+</div>
+
+<script src="script.js"></script>
 </body>
 </html>
