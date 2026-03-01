@@ -4,9 +4,10 @@ document.getElementById("bookingForm").addEventListener("submit", async function
   const data = {
     name: this[0].value,
     email: this[1].value,
-    service: this[2].value,
-    date: this[3].value,
-    time: this[4].value
+    number:this[2].value,
+    service: this[3].value,
+    date: this[4].value,
+    time: this[5].value
   };
 
   await fetch("https://script.google.com/macros/s/AKfycbwes8uhtnuOKRtLxxANZqImqJK89-04XuljRf3b1jENsY7fPz6tolHzGnZioVuk7iv4/exec", {
