@@ -9,7 +9,7 @@ document.getElementById("bookingForm").addEventListener("submit", async function
     time: this[4].value
   };
 
-  await fetch("PASTE_YOUR_GOOGLE_SCRIPT_URL_HERE", {
+  await fetch("https://script.google.com/macros/s/AKfycbwes8uhtnuOKRtLxxANZqImqJK89-04XuljRf3b1jENsY7fPz6tolHzGnZioVuk7iv4/exec", {
     method: "POST",
     body: JSON.stringify(data)
   });
