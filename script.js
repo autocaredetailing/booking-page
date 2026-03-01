@@ -14,7 +14,7 @@ document.getElementById("bookingForm").addEventListener("submit", async function
     body: JSON.stringify(data)
   });
 
-  alert("Booking confirmed! We'll contact you shortly.");
+  alert("Thanks for booking with us! We'll contact you shortly to confirm your appointment details.");
   this.reset();
 });
 
