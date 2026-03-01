@@ -64,3 +64,11 @@ button:hover {
   font-size: 0.85rem;
   text-align: center;
 }
+
+logo {
+  width: 100%;
+  max-width: 220px;
+  height: auto;
+  display: block;
+  margin: 0 auto 1rem auto;
+}
