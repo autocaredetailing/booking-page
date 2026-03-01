@@ -1,4 +1,4 @@
-const scriptURL = "YOUR_WEB_APP_URL"; // paste your /exec URL
+const scriptURL = "https://script.google.com/macros/library/d/1DmJSVPbCiASsogM7oabqlY_jmUVdhKhTBZly8w3PlqBL59HKl952k6ab/3"; // paste your /exec URL
 
 document.getElementById("bookingForm").addEventListener("submit", async function(e) {
   e.preventDefault();
