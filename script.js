@@ -4,18 +4,23 @@ form.addEventListener("submit", async (e) => {
   e.preventDefault();
 
   const formData = new FormData(form);
-
   const data = Object.fromEntries(formData.entries());
 
   try {
-    await fetch("https://script.google.com/macros/s/AKfycbwes8uhtnuOKRtLxxANZqImqJK89-04XuljRf3b1jENsY7fPz6tolHzGnZioVuk7iv4/exec", {
+    const response = await fetch("PASTE_YOUR_WEB_APP_URL_HERE", {
       method: "POST",
-      body: JSON.stringify(data),
+      body: JSON.stringify(data)
     });
 
-    alert("Thanks for booking with us! We'll contact you shortly to confirm your appointment.");
+    const result = await response.json();
 
-    form.reset();
+    if (result.success) {
+      alert("Thanks for booking with us! We'll contact you shortly to confirm your appointment.");
+      form.reset();
+    } else {
+      throw new Error("Failed");
+    }
+
   } catch (err) {
     alert("Something went wrong. Please try again.");
     console.error(err);
