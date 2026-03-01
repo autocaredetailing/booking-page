@@ -1,22 +1,25 @@
-document.getElementById("bookingForm").addEventListener("submit", async function(e) {
+const form = document.getElementById("bookingForm");
+
+form.addEventListener("submit", async (e) => {
   e.preventDefault();
 
-  const data = {
-    name: this[0].value,
-    email: this[1].value,
-    number:this[2].value,
-    service: this[3].value,
-    date: this[4].value,
-    time: this[5].value
-  };
+  const formData = new FormData(form);
 
-  await fetch("https://script.google.com/macros/s/AKfycbwes8uhtnuOKRtLxxANZqImqJK89-04XuljRf3b1jENsY7fPz6tolHzGnZioVuk7iv4/exec", {
-    method: "POST",
-    body: JSON.stringify(data)
-  });
+  const data = Object.fromEntries(formData.entries());
 
-  alert("Thanks for booking with us! We'll contact you shortly to confirm your appointment details.");
-  this.reset();
+  try {
+    await fetch("https://script.google.com/macros/s/AKfycbwes8uhtnuOKRtLxxANZqImqJK89-04XuljRf3b1jENsY7fPz6tolHzGnZioVuk7iv4/exec", {
+      method: "POST",
+      body: JSON.stringify(data),
+    });
+
+    alert("Thanks for booking with us! We'll contact you shortly to confirm your appointment.");
+
+    form.reset();
+  } catch (err) {
+    alert("Something went wrong. Please try again.");
+    console.error(err);
+  }
 });
 
 // Prevent past dates
