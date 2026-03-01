@@ -1,35 +1,28 @@
-const scriptURL = "https://script.google.com/macros/library/d/1DmJSVPbCiASsogM7oabqlY_jmUVdhKhTBZly8w3PlqBL59HKl952k6ab/2";
+const scriptURL = "YOUR_WEB_APP_URL"; // paste your /exec URL
 
 document.getElementById("bookingForm").addEventListener("submit", async function(e) {
   e.preventDefault();
 
-  const data = {
-    name: document.getElementById("name").value,
-    email: document.getElementById("email").value,
-    phone: document.getElementById("phone").value,
-    service: document.getElementById("service").value,
-    date: document.getElementById("date").value,
-    time: document.getElementById("time").value
-  };
+  const formData = new FormData();
+  formData.append("name", document.getElementById("name").value);
+  formData.append("email", document.getElementById("email").value);
+  formData.append("phone", document.getElementById("phone").value);
+  formData.append("service", document.getElementById("service").value);
+  formData.append("date", document.getElementById("date").value);
+  formData.append("time", document.getElementById("time").value);
 
   try {
-    const response = await fetch(scriptURL, {
+    await fetch(scriptURL, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(data)
+      body: formData
     });
 
-    const result = await response.json();
-
-    if (result.status === "success") {
-      alert("✅ Booking submitted successfully!");
-      document.getElementById("bookingForm").reset();
-    } else {
-      alert("❌ Error submitting booking.");
-    }
+    alert("✅ Booking submitted successfully!");
+    document.getElementById("bookingForm").reset();
 
   } catch (error) {
-    alert("⚠️ Network error. Please try again.");
+    alert("❌ Error submitting booking.");
+    console.error(error);
   }
 });
 
