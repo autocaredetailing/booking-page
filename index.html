@@ -1,10 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Book an Appointment</title>
+
 <link rel="stylesheet" href="style.css">
+
 </head>
 
 <body>
@@ -18,11 +21,13 @@
 
 <form id="bookingForm">
 
-<input type="text" id="name" placeholder="Full Name" required>
-<input type="email" id="email" placeholder="Email Address" required>
-<input type="tel" id="phone" placeholder="Phone Number" required>
+<input type="text" id="name" name="name" placeholder="Full Name" required>
 
-<select name="service" required>
+<input type="email" id="email" name="email" placeholder="Email Address" required>
+
+<input type="tel" id="phone" name="phone" placeholder="Phone Number" required>
+
+<select id="service" name="service" required>
 
 <option value="">Select a Service</option>
 
@@ -57,9 +62,9 @@
 
 </select>
 
-<input type="date" name="date" required>
+<input type="date" id="date" name="date" required>
 
-<input type="time" name="time" required>
+<input type="time" id="time" name="time" required>
 
 <button type="submit">Confirm Booking</button>
 
@@ -75,7 +80,7 @@ const scriptURL = "https://script.google.com/macros/s/AKfycbxhGIjRbVdF9NJEr3weGr
 
 const form = document.getElementById("bookingForm")
 
-form.addEventListener("submit", e => {
+form.addEventListener("submit", function(e){
 
 e.preventDefault()
 
@@ -85,12 +90,19 @@ fetch(scriptURL,{
 method:"POST",
 body:JSON.stringify(data)
 })
-.then(res => res.json())
-.then(()=>{
+.then(response => response.json())
+.then(data => {
 
-alert("Booking confirmed!")
+alert("Booking confirmed! We will contact you shortly.")
 
 form.reset()
+
+})
+.catch(error => {
+
+console.error("Error!", error)
+
+alert("Something went wrong. Please try again.")
 
 })
 
