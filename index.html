@@ -1,1 +1,87 @@
-<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <link rel=\"stylesheet\" href=\"style.css\">\n    <title>Booking Page</title>\n</head>\n<body>\n    <h1>Booking Page</h1>\n    <form id=\"bookingForm\">\n        <label for=\"name\">Name:</label>\n        <input type=\"text\" id=\"name\" name=\"name\" required>\n        <label for=\"email\">Email:</label>\n        <input type=\"email\" id=\"email\" name=\"email\" required>\n        <label for=\"phone\">Phone:</label>\n        <input type=\"tel\" id=\"phone\" name=\"phone\" required>\n        <label for=\"service\">Service:</label>\n        <select id=\"service\" name=\"service\">\n            <option value=\"service1\">Service 1</option>\n            <option value=\"service2\">Service 2</option>\n        </select>\n        <label for=\"date\">Select Date:</label>\n        <input type=\"date\" id=\"date\" name=\"date\" required>\n        <label for=\"time\">Select Time:</label>\n        <select id=\"time\" name=\"time\" required>\n            <option value=\"09:00\">09:00</option>\n            <option value=\"10:00\">10:00</option>\n            <option value=\"11:00\">11:00</option>\n            <option value=\"13:00\">13:00</option>\n            <option value=\"14:00\">14:00</option>\n            <option value=\"15:00\">15:00</option>\n            <option value=\"16:00\">16:00</option>\n        </select>\n        <button type=\"submit\">Book</button>\n    </form>\n    <script src=\"https://code.jquery.com/jquery-3.6.0.min.js\"></script>\n    <script>\n        $(document).ready(function() {\n            function fetchBookings() {\n                // Fetch existing bookings from Google Sheets\n            }\n\n            $('#date').change(function() {\n                var selectedDate = $(this).val();\n                // Code to fetch available time slots based on selected date\n                // Disable/mark booked slots as "Booked"\n                // Mark available slots as "Available"\n            });\n\n            $('#bookingForm').on('submit', function(event) {\n                event.preventDefault();\n                // Check if selected time slot is booked before confirming\n                // Code to confirm the booking\n            });\n\n            fetchBookings();\n        });\n    </script>\n</body>\n</html>\n
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Booking Page</title>
+    <style>
+        body {
+            background-color: #001f3f; /* dark blue background */
+            color: white;
+            font-family: Arial, sans-serif;
+        }
+        .button {
+            background: linear-gradient(to right, cyan, #00bcd4);
+            border: none;
+            padding: 10px 20px;
+            text-align: center;
+            color: white;
+            cursor: pointer;
+            font-size: 16px;
+            border-radius: 5px;
+        }
+        .time-slot {
+            margin: 5px;
+            padding: 10px;
+            border: 1px solid #00bcd4;
+            display: inline-block;
+        }
+        .booked {
+            background-color: red;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <h1>Book Your Appointment</h1>
+    <form id="booking-form">
+        <label for="date">Select Date:</label>
+        <input type="date" id="date" required><br><br>
+        <label for="time">Select Time:</label>
+        <div id="time-slots">
+            <div class="time-slot" data-time="09:00">09:00</div>
+            <div class="time-slot" data-time="10:00">10:00</div>
+            <div class="time-slot" data-time="11:00">11:00</div>
+            <div class="time-slot" data-time="13:00">13:00</div>
+            <div class="time-slot" data-time="14:00">14:00</div>
+            <div class="time-slot" data-time="15:00">15:00</div>
+            <div class="time-slot" data-time="16:00">16:00</div>
+        </div>
+        <input type="submit" class="button" value="Book Now">
+    </form>
+    <script>
+        const bookedSlots = {};
+
+        document.querySelectorAll('.time-slot').forEach(slot => {
+            slot.addEventListener('click', function() {
+                if (!this.classList.contains('booked')) {
+                    this.classList.toggle('selected');
+                }
+            });
+        });
+
+        document.getElementById('booking-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const selectedDate = document.getElementById('date').value;
+            const selectedTime = document.querySelector('.time-slot.selected');
+
+            if (selectedTime) {
+                const timeValue = selectedTime.getAttribute('data-time');
+                const bookingKey = selectedDate + ' ' + timeValue;
+
+                if (bookedSlots[bookingKey]) {
+                    alert('This time slot is already booked. Please choose another.');
+                } else {
+                    bookedSlots[bookingKey] = true;
+                    selectedTime.classList.add('booked');
+                    alert('Your appointment for ' + selectedDate + ' at ' + timeValue + ' is booked!');
+                    // Optionally reset the form
+                    this.reset();
+                }
+            } else {
+                alert('Please select a time slot.');
+            }
+        });
+    </script>
+</body>
+</html>
