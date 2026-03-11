@@ -1,87 +1,114 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Booking Page</title>
-    <style>
-        body {
-            background-color: #001f3f; /* dark blue background */
-            color: white;
-            font-family: Arial, sans-serif;
-        }
-        .button {
-            background: linear-gradient(to right, cyan, #00bcd4);
-            border: none;
-            padding: 10px 20px;
-            text-align: center;
-            color: white;
-            cursor: pointer;
-            font-size: 16px;
-            border-radius: 5px;
-        }
-        .time-slot {
-            margin: 5px;
-            padding: 10px;
-            border: 1px solid #00bcd4;
-            display: inline-block;
-        }
-        .booked {
-            background-color: red;
-            color: white;
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Book an Appointment</title>
+
+<link rel="stylesheet" href="style.css">
+
 </head>
+
 <body>
-    <h1>Book Your Appointment</h1>
-    <form id="booking-form">
-        <label for="date">Select Date:</label>
-        <input type="date" id="date" required><br><br>
-        <label for="time">Select Time:</label>
-        <div id="time-slots">
-            <div class="time-slot" data-time="09:00">09:00</div>
-            <div class="time-slot" data-time="10:00">10:00</div>
-            <div class="time-slot" data-time="11:00">11:00</div>
-            <div class="time-slot" data-time="13:00">13:00</div>
-            <div class="time-slot" data-time="14:00">14:00</div>
-            <div class="time-slot" data-time="15:00">15:00</div>
-            <div class="time-slot" data-time="16:00">16:00</div>
-        </div>
-        <input type="submit" class="button" value="Book Now">
-    </form>
-    <script>
-        const bookedSlots = {};
 
-        document.querySelectorAll('.time-slot').forEach(slot => {
-            slot.addEventListener('click', function() {
-                if (!this.classList.contains('booked')) {
-                    this.classList.toggle('selected');
-                }
-            });
-        });
+<div class="container">
 
-        document.getElementById('booking-form').addEventListener('submit', function(event) {
-            event.preventDefault();
-            const selectedDate = document.getElementById('date').value;
-            const selectedTime = document.querySelector('.time-slot.selected');
+<img src="logo.png" alt="Autocare Detailing Ltd" class="logo">
 
-            if (selectedTime) {
-                const timeValue = selectedTime.getAttribute('data-time');
-                const bookingKey = selectedDate + ' ' + timeValue;
+<h1>Book Your Appointment</h1>
+<p>We bring the sheen to you ✨</p>
 
-                if (bookedSlots[bookingKey]) {
-                    alert('This time slot is already booked. Please choose another.');
-                } else {
-                    bookedSlots[bookingKey] = true;
-                    selectedTime.classList.add('booked');
-                    alert('Your appointment for ' + selectedDate + ' at ' + timeValue + ' is booked!');
-                    // Optionally reset the form
-                    this.reset();
-                }
-            } else {
-                alert('Please select a time slot.');
-            }
-        });
-    </script>
+<form id="bookingForm">
+
+<input type="text" id="name" name="name" placeholder="Full Name" required>
+
+<input type="email" id="email" name="email" placeholder="Email Address" required>
+
+<input type="tel" id="phone" name="phone" placeholder="Phone Number" required>
+
+<select id="service" name="service" required>
+
+<option value="">Select a Service</option>
+
+<optgroup label="Basic Exterior Services">
+<option value="Exterior Manual Wash">Exterior Manual Wash</option>
+<option value="Wheel & Tire Cleaning">Wheel & Tire Cleaning</option>
+<option value="Exterior Dry & Shine">Exterior Dry & Shine</option>
+</optgroup>
+
+<optgroup label="Basic Interior Services">
+<option value="Interior Vacuum">Interior Vacuum</option>
+<option value="Dashboard Wipe Down">Dashboard Wipe Down</option>
+<option value="Interior Window Cleaning">Interior Window Cleaning</option>
+</optgroup>
+
+<optgroup label="Optional Add-ons">
+<option value="Hot Wax">Hot Wax</option>
+<option value="Rims and Tire Shine">Rims and Tire Shine</option>
+<option value="Odor Removal">Odor Removal</option>
+</optgroup>
+
+<optgroup label="Bundled Services">
+<option value="Standard Detail Package">Standard Detail Package</option>
+<option value="Premium Detail Package">Premium Detail Package</option>
+</optgroup>
+
+<optgroup label="Monthly Plans">
+<option value="Basic Monthly Plan">Basic Monthly Plan</option>
+<option value="Premium Monthly Plan">Premium Monthly Plan</option>
+<option value="VIP Monthly Plan">VIP Monthly Plan</option>
+</optgroup>
+
+</select>
+
+<input type="date" id="date" name="date" required>
+
+<input type="time" id="time" name="time" required>
+
+<button type="submit">Confirm Booking</button>
+
+</form>
+
+<small>You’ll receive a confirmation after booking.</small>
+
+</div>
+
+<script>
+
+const scriptURL = "https://script.google.com/macros/s/AKfycbxhGIjRbVdF9NJEr3weGrV2NZLotRW9oOXpZIaSm-Q72BFyr9ey4CzpWlEY5Tgp7qJ89Q/exec"
+
+const form = document.getElementById("bookingForm")
+
+form.addEventListener("submit", function(e){
+
+e.preventDefault()
+
+const data = Object.fromEntries(new FormData(form))
+
+fetch(scriptURL,{
+method:"POST",
+body:JSON.stringify(data)
+})
+.then(response => response.json())
+.then(data => {
+
+alert("Booking confirmed! We will contact you shortly.")
+
+form.reset()
+
+})
+.catch(error => {
+
+console.error("Error!", error)
+
+alert("Something went wrong. Please try again.")
+
+})
+
+})
+
+</script>
+
 </body>
 </html>
