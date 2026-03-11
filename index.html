@@ -17,7 +17,10 @@
 <img src="logo.png" alt="Autocare Detailing Ltd" class="logo">
 
 <h1>Book Your Appointment</h1>
+
 <p>We bring the sheen to you ✨</p>
+
+<div id="businessHours" style="background: #f0f0f0; padding: 15px; margin-bottom: 20px; border-radius: 5px; font-size: 14px;"><strong>Business Hours:</strong><br>📅 Mon-Fri: 7:00 AM - 3:00 PM<br>📅 Saturday: 7:00 AM - 5:00 PM<br>📅 Sunday: 7:00 AM - 1:00 PM</div>
 
 <form id="bookingForm">
 
@@ -33,6 +36,7 @@
 
 <optgroup label="Basic Exterior Services">
 <option value="Exterior Manual Wash">Exterior Manual Wash</option>
+
 <option value="Wheel & Tire Cleaning">Wheel & Tire Cleaning</option>
 <option value="Exterior Dry & Shine">Exterior Dry & Shine</option>
 </optgroup>
@@ -47,6 +51,7 @@
 <option value="Hot Wax">Hot Wax</option>
 <option value="Rims and Tire Shine">Rims and Tire Shine</option>
 <option value="Odor Removal">Odor Removal</option>
+
 </optgroup>
 
 <optgroup label="Bundled Services">
@@ -66,11 +71,13 @@
 
 <input type="time" id="time" name="time" required>
 
+<div id="timeInfo" style="color: #666; font-size: 12px; margin-top: 5px;"></div>
+
 <button type="submit">Confirm Booking</button>
 
 </form>
 
-<small>You’ll receive a confirmation after booking.</small>
+<small>You'll receive a confirmation after booking.</small>
 
 </div>
 
@@ -79,6 +86,54 @@
 const scriptURL = "https://script.google.com/macros/s/AKfycbxhGIjRbVdF9NJEr3weGrV2NZLotRW9oOXpZIaSm-Q72BFyr9ey4CzpWlEY5Tgp7qJ89Q/exec"
 
 const form = document.getElementById("bookingForm")
+const dateInput = document.getElementById("date")
+const timeInput = document.getElementById("time")
+const timeInfo = document.getElementById("timeInfo")
+
+// Business Hours: 0=Sunday, 1=Monday, ..., 6=Saturday
+const businessHours = {
+  0: { open: 7, close: 13, name: "Sunday" },      // 7 AM - 1 PM
+  1: { open: 7, close: 15, name: "Monday" },      // 7 AM - 3 PM
+  2: { open: 7, close: 15, name: "Tuesday" },     // 7 AM - 3 PM
+  3: { open: 7, close: 15, name: "Wednesday" },   // 7 AM - 3 PM
+  4: { open: 7, close: 15, name: "Thursday" },    // 7 AM - 3 PM
+  5: { open: 7, close: 15, name: "Friday" },      // 7 AM - 3 PM
+  6: { open: 7, close: 17, name: "Saturday" }     // 7 AM - 5 PM
+}
+
+// Set minimum date to today
+const today = new Date().toISOString().split('T')[0]
+dateInput.setAttribute('min', today)
+
+// Update time info when date changes
+dateInput.addEventListener("change", function() {
+  updateTimeConstraints()
+})
+
+// Update time info when time changes
+timeInput.addEventListener("change", function() {
+  updateTimeConstraints()
+})
+
+function updateTimeConstraints() {
+  const selectedDate = new Date(dateInput.value + "T00:00:00")
+  const dayOfWeek = selectedDate.getDay()
+  const hours = businessHours[dayOfWeek]
+  
+  if (!dateInput.value) {
+    timeInfo.textContent = ""
+    return
+  }
+  
+  const openTime = String(hours.open).padStart(2, '0') + ":00"
+  const closeTime = String(hours.close).padStart(2, '0') + ":00"
+  
+  timeInfo.textContent = `📍 ${hours.name}: Available ${openTime} - ${closeTime}`
+  
+  // Set time input constraints
+  timeInput.setAttribute('min', String(hours.open).padStart(2, '0') + ":00")
+  timeInput.setAttribute('max', String(hours.close).padStart(2, '0') + ":00")
+}
 
 form.addEventListener("submit", function(e){
 
@@ -86,24 +141,51 @@ e.preventDefault()
 
 const data = Object.fromEntries(new FormData(form))
 
+// Validate date is not in the past
+const selectedDate = new Date(dateInput.value + "T00:00:00")
+const now = new Date()
+
+if (selectedDate < now) {
+  alert("❌ Please select a future date.")
+  return
+}
+
+// Validate business hours
+const dayOfWeek = selectedDate.getDay()
+const hours = businessHours[dayOfWeek]
+const [timeHour, timeMinute] = timeInput.value.split(':').map(Number)
+
+if (timeHour < hours.open || timeHour >= hours.close) {
+  alert(`❌ We're closed at that time. ${hours.name} hours: ${String(hours.open).padStart(2, '0')}:00 - ${String(hours.close).padStart(2, '0')}:00`)
+  return
+}
+
 fetch(scriptURL,{
 method:"POST",
+headers: {
+  "Content-Type": "application/json"
+},
 body:JSON.stringify(data)
 })
 .then(response => response.json())
 .then(data => {
 
-alert("Booking confirmed! We will contact you shortly.")
+if (data.status === "error") {
+  alert("⚠️ " + data.message)
+  return
+}
+
+alert("✅ Booking confirmed! We will contact you shortly.")
 
 form.reset()
+timeInfo.textContent = ""
 
 })
 .catch(error => {
 
 console.error("Error!", error)
 
-alert("Something went wrong. Please try again.")
-
+alert("❌ Booking failed. Please try again or contact support.")
 })
 
 })
