@@ -1,114 +1,58 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Book an Appointment</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Booking Page</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <script>
+        $(function() {
+            // Initialize datepicker
+            $('#booking-date').datepicker();
 
-<link rel="stylesheet" href="style.css">
+            // Time slots
+            const timeSlots = ["09:00 AM", "10:00 AM", "11:00 AM", "01:00 PM", "02:00 PM", "03:00 PM"];
+            timeSlots.forEach(slot => {
+                $('#time-slots').append(`<option value="${slot}">${slot}</option>`);
+            });
 
+            // Form validation
+            $('#booking-form').on('submit', function(event) {
+                event.preventDefault();
+                // Basic validation
+                let email = $('#email').val();
+                if (!validateEmail(email)) {
+                    alert('Please enter a valid email address.');
+                    return;
+                }
+                alert('Booking confirmed! Confirmation will be sent to ' + email);
+                // Add email confirmation handling here
+            });
+        });
+
+        function validateEmail(email) {
+            const re = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+            return re.test(email);
+        }
+    </script>
 </head>
-
 <body>
-
-<div class="container">
-
-<img src="logo.png" alt="Autocare Detailing Ltd" class="logo">
-
-<h1>Book Your Appointment</h1>
-<p>We bring the sheen to you ✨</p>
-
-<form id="bookingForm">
-
-<input type="text" id="name" name="name" placeholder="Full Name" required>
-
-<input type="email" id="email" name="email" placeholder="Email Address" required>
-
-<input type="tel" id="phone" name="phone" placeholder="Phone Number" required>
-
-<select id="service" name="service" required>
-
-<option value="">Select a Service</option>
-
-<optgroup label="Basic Exterior Services">
-<option value="Exterior Manual Wash">Exterior Manual Wash</option>
-<option value="Wheel & Tire Cleaning">Wheel & Tire Cleaning</option>
-<option value="Exterior Dry & Shine">Exterior Dry & Shine</option>
-</optgroup>
-
-<optgroup label="Basic Interior Services">
-<option value="Interior Vacuum">Interior Vacuum</option>
-<option value="Dashboard Wipe Down">Dashboard Wipe Down</option>
-<option value="Interior Window Cleaning">Interior Window Cleaning</option>
-</optgroup>
-
-<optgroup label="Optional Add-ons">
-<option value="Hot Wax">Hot Wax</option>
-<option value="Rims and Tire Shine">Rims and Tire Shine</option>
-<option value="Odor Removal">Odor Removal</option>
-</optgroup>
-
-<optgroup label="Bundled Services">
-<option value="Standard Detail Package">Standard Detail Package</option>
-<option value="Premium Detail Package">Premium Detail Package</option>
-</optgroup>
-
-<optgroup label="Monthly Plans">
-<option value="Basic Monthly Plan">Basic Monthly Plan</option>
-<option value="Premium Monthly Plan">Premium Monthly Plan</option>
-<option value="VIP Monthly Plan">VIP Monthly Plan</option>
-</optgroup>
-
-</select>
-
-<input type="date" id="date" name="date" required>
-
-<input type="time" id="time" name="time" required>
-
-<button type="submit">Confirm Booking</button>
-
-</form>
-
-<small>You’ll receive a confirmation after booking.</small>
-
-</div>
-
-<script>
-
-const scriptURL = "https://script.google.com/macros/s/AKfycbxhGIjRbVdF9NJEr3weGrV2NZLotRW9oOXpZIaSm-Q72BFyr9ey4CzpWlEY5Tgp7qJ89Q/exec"
-
-const form = document.getElementById("bookingForm")
-
-form.addEventListener("submit", function(e){
-
-e.preventDefault()
-
-const data = Object.fromEntries(new FormData(form))
-
-fetch(scriptURL,{
-method:"POST",
-body:JSON.stringify(data)
-})
-.then(response => response.json())
-.then(data => {
-
-alert("Booking confirmed! We will contact you shortly.")
-
-form.reset()
-
-})
-.catch(error => {
-
-console.error("Error!", error)
-
-alert("Something went wrong. Please try again.")
-
-})
-
-})
-
-</script>
-
+    <div class="booking-container">
+        <h1>Book Your Appointment</h1>
+        <form id="booking-form">
+            <label for="booking-date">Select Date:</label>
+            <input type="text" id="booking-date" required>
+            <label for="time-slots">Select Time Slot:</label>
+            <select id="time-slots" required></select>
+            <label for="customer-name">Your Name:</label>
+            <input type="text" id="customer-name" required>
+            <label for="email">Email:</label>
+            <input type="email" id="email" required>
+            <button type="submit">Confirm Booking</button>
+        </form>
+    </div>
 </body>
 </html>
