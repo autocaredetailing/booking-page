@@ -6,38 +6,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Book an Appointment</title>
 
-<style>
-body{
-font-family:Arial;
-background:#f6f6f6;
-display:flex;
-justify-content:center;
-align-items:center;
-height:100vh;
-}
-
-.container{
-background:white;
-padding:25px;
-width:350px;
-border-radius:8px;
-box-shadow:0 0 10px rgba(0,0,0,0.1);
-text-align:center;
-}
-
-input,select,button{
-width:100%;
-padding:10px;
-margin:8px 0;
-}
-
-button{
-background:black;
-color:white;
-border:none;
-cursor:pointer;
-}
-</style>
+<link rel="stylesheet" href="style.css">
 
 </head>
 
@@ -45,107 +14,178 @@ cursor:pointer;
 
 <div class="container">
 
-<h2>Book Your Appointment</h2>
+<img src="logo.png" alt="Autocare Detailing Ltd" class="logo">
+
+<h1>Book Your Appointment</h1>
+
 <p>We bring the sheen to you ✨</p>
 
-<div id="businessHours">
-<strong>Business Hours</strong><br>
-Mon–Fri: 7 AM – 3 PM<br>
-Saturday: 7 AM – 5 PM<br>
-Sunday: 7 AM – 1 PM
-</div>
+<div id="businessHours" style="background: #f0f0f0; padding: 15px; margin-bottom: 20px; border-radius: 5px; font-size: 14px;"><strong>Business Hours:</strong><br>📅 Mon-Fri: 7:00 AM - 3:00 PM<br>📅 Saturday: 7:00 AM - 5:00 PM<br>📅 Sunday: 7:00 AM - 1:00 PM</div>
 
 <form id="bookingForm">
 
-<input name="name" placeholder="Full Name" required>
-<input name="email" type="email" placeholder="Email Address" required>
-<input name="phone" placeholder="Phone Number" required>
+<input type="text" id="name" name="name" placeholder="Full Name" required>
 
-<select name="service" required>
-<option value="">Select Service</option>
-<option>Exterior Manual Wash</option>
-<option>Wheel & Tire Cleaning</option>
-<option>Interior Vacuum</option>
-<option>Dashboard Wipe Down</option>
-<option>Standard Detail Package</option>
-<option>Premium Detail Package</option>
+<input type="email" id="email" name="email" placeholder="Email Address" required>
+
+<input type="tel" id="phone" name="phone" placeholder="Phone Number" required>
+
+<select id="service" name="service" required>
+
+<option value="">Select a Service</option>
+
+<optgroup label="Basic Exterior Services">
+<option value="Exterior Manual Wash">Exterior Manual Wash</option>
+
+<option value="Wheel & Tire Cleaning">Wheel & Tire Cleaning</option>
+<option value="Exterior Dry & Shine">Exterior Dry & Shine</option>
+</optgroup>
+
+<optgroup label="Basic Interior Services">
+<option value="Interior Vacuum">Interior Vacuum</option>
+<option value="Dashboard Wipe Down">Dashboard Wipe Down</option>
+<option value="Interior Window Cleaning">Interior Window Cleaning</option>
+</optgroup>
+
+<optgroup label="Optional Add-ons">
+<option value="Hot Wax">Hot Wax</option>
+<option value="Rims and Tire Shine">Rims and Tire Shine</option>
+<option value="Odor Removal">Odor Removal</option>
+
+</optgroup>
+
+<optgroup label="Bundled Services">
+<option value="Standard Detail Package">Standard Detail Package</option>
+<option value="Premium Detail Package">Premium Detail Package</option>
+</optgroup>
+
+<optgroup label="Monthly Plans">
+<option value="Basic Monthly Plan">Basic Monthly Plan</option>
+<option value="Premium Monthly Plan">Premium Monthly Plan</option>
+<option value="VIP Monthly Plan">VIP Monthly Plan</option>
+</optgroup>
+
 </select>
 
 <input type="date" id="date" name="date" required>
+
 <input type="time" id="time" name="time" required>
 
-<div id="timeInfo"></div>
+<div id="timeInfo" style="color: #666; font-size: 12px; margin-top: 5px;"></div>
 
 <button type="submit">Confirm Booking</button>
 
 </form>
 
+<small>You'll receive a confirmation after booking.</small>
+
 </div>
 
 <script>
 
-const scriptURL="https://script.google.com/macros/s/AKfycbyc59tTIJX91BVbeawwCkcXMD9wUnZnRTwTfTXkn0RCJuCypD3NI_QfN-jG1VTquQ2vHQ/exec"
+const scriptURL = "https://script.google.com/macros/s/AKfycbyc59tTIJX91BVbeawwCkcXMD9wUnZnRTwTfTXkn0RCJuCypD3NI_QfN-jG1VTquQ2vHQ/exec"
 
-const form=document.getElementById("bookingForm")
-const dateInput=document.getElementById("date")
-const timeInput=document.getElementById("time")
-const info=document.getElementById("timeInfo")
+const form = document.getElementById("bookingForm")
+const dateInput = document.getElementById("date")
+const timeInput = document.getElementById("time")
+const timeInfo = document.getElementById("timeInfo")
 
-const hours={
-0:{open:7,close:13,name:"Sunday"},
-1:{open:7,close:15,name:"Monday"},
-2:{open:7,close:15,name:"Tuesday"},
-3:{open:7,close:15,name:"Wednesday"},
-4:{open:7,close:15,name:"Thursday"},
-5:{open:7,close:15,name:"Friday"},
-6:{open:7,close:17,name:"Saturday"}
+// Business Hours: 0=Sunday, 1=Monday, ..., 6=Saturday
+const businessHours = {
+  0: { open: 7, close: 13, name: "Sunday" },      // 7 AM - 1 PM
+  1: { open: 7, close: 15, name: "Monday" },      // 7 AM - 3 PM
+  2: { open: 7, close: 15, name: "Tuesday" },     // 7 AM - 3 PM
+  3: { open: 7, close: 15, name: "Wednesday" },   // 7 AM - 3 PM
+  4: { open: 7, close: 15, name: "Thursday" },    // 7 AM - 3 PM
+  5: { open: 7, close: 15, name: "Friday" },      // 7 AM - 3 PM
+  6: { open: 7, close: 17, name: "Saturday" }     // 7 AM - 5 PM
 }
 
-dateInput.min=new Date().toISOString().split("T")[0]
+// Set minimum date to today
+const today = new Date().toISOString().split('T')[0]
+dateInput.setAttribute('min', today)
 
-dateInput.addEventListener("change",()=>{
-
-const date=new Date(dateInput.value+"T00:00")
-const day=date.getDay()
-const h=hours[day]
-
-timeInput.min=String(h.open).padStart(2,"0")+":00"
-timeInput.max=String(h.close).padStart(2,"0")+":00"
-
-info.textContent=`${h.name} hours: ${timeInput.min} - ${timeInput.max}`
-
+// Update time info when date changes
+dateInput.addEventListener("change", function() {
+  updateTimeConstraints()
 })
 
-form.addEventListener("submit",e=>{
+// Update time info when time changes
+timeInput.addEventListener("change", function() {
+  updateTimeConstraints()
+})
+
+function updateTimeConstraints() {
+  const selectedDate = new Date(dateInput.value + "T00:00:00")
+  const dayOfWeek = selectedDate.getDay()
+  const hours = businessHours[dayOfWeek]
+  
+  if (!dateInput.value) {
+    timeInfo.textContent = ""
+    return
+  }
+  
+  const openTime = String(hours.open).padStart(2, '0') + ":00"
+  const closeTime = String(hours.close).padStart(2, '0') + ":00"
+  
+  timeInfo.textContent = `📍 ${hours.name}: Available ${openTime} - ${closeTime}`
+  
+  // Set time input constraints
+  timeInput.setAttribute('min', String(hours.open).padStart(2, '0') + ":00")
+  timeInput.setAttribute('max', String(hours.close).padStart(2, '0') + ":00")
+}
+
+form.addEventListener("submit", function(e){
+
 e.preventDefault()
 
-const date=new Date(dateInput.value+"T00:00")
-const day=date.getDay()
-const h=hours[day]
+const data = Object.fromEntries(new FormData(form))
 
-const hour=parseInt(timeInput.value.split(":")[0])
+// Validate date is not in the past
+const selectedDate = new Date(dateInput.value + "T00:00:00")
+const now = new Date()
 
-if(hour<h.open||hour>=h.close){
-alert(`Closed at that time. ${h.name}: ${h.open}:00 - ${h.close}:00`)
-return
+if (selectedDate < now) {
+  alert("❌ Please select a future date.")
+  return
+}
+
+// Validate business hours
+const dayOfWeek = selectedDate.getDay()
+const hours = businessHours[dayOfWeek]
+const [timeHour, timeMinute] = timeInput.value.split(':').map(Number)
+
+if (timeHour < hours.open || timeHour >= hours.close) {
+  alert(`❌ We're closed at that time. ${hours.name} hours: ${String(hours.open).padStart(2, '0')}:00 - ${String(hours.close).padStart(2, '0')}:00`)
+  return
 }
 
 fetch(scriptURL,{
 method:"POST",
-body:new FormData(form)
+headers: {
+  "Content-Type": "application/json"
+},
+body:JSON.stringify(data)
 })
-.then(res=>res.text())
-.then(()=>{
+.then(response => response.json())
+.then(data => {
 
-alert("✅ Booking Confirmed!")
+if (data.status === "error") {
+  alert("⚠️ " + data.message)
+  return
+}
+
+alert("✅ Booking confirmed! We will contact you shortly.")
 
 form.reset()
-info.textContent=""
+timeInfo.textContent = ""
 
 })
-.catch(err=>{
-console.error(err)
-alert("❌ Booking failed")
+.catch(error => {
+
+console.error("Error!", error)
+
+alert("❌ Booking failed. Please try again or contact support.")
 })
 
 })
